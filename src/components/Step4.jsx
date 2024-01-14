@@ -1,4 +1,34 @@
-const Step4 = ({ formData, handleChange, prevStep }) => {
+import { useState } from "react";
+
+const Step4 = ({ formData, handleChange, prevStep, validation }) => {
+  const [errorUsername, setErrorUsername] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
+  const [errorConfirmPassword, setErrorConfirmPassword] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!validation.username) {
+      setErrorUsername("Username of  is required");
+    }
+
+    if (!validation.password) {
+      setErrorPassword("Password is required");
+    }
+
+    if (!validation.confirmPassword) {
+      setErrorConfirmPassword("Password do no match");
+    }
+
+    if (
+      validation.username &&
+      validation.password &&
+      validation.confirmPassword
+    ) {
+      console.log(formData);
+    }
+  };
+
   const handlePrev = () => {
     prevStep();
   };
@@ -19,9 +49,18 @@ const Step4 = ({ formData, handleChange, prevStep }) => {
             required
             value={formData.username}
             onChange={handleChange}
-            className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+            className={`w-full rounded-md border-2 py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6 focus:bg-none ${
+              validation.username
+                ? "border-green-500"
+                : errorUsername
+                ? "border-red-500"
+                : ""
+            }`}
           />
         </div>
+        <p className={`error mt-1 ${validation.username ? "hidden" : ""}`}>
+          {errorUsername}
+        </p>
       </div>
       <div>
         <div>
@@ -40,9 +79,18 @@ const Step4 = ({ formData, handleChange, prevStep }) => {
             required
             value={formData.password}
             onChange={handleChange}
-            className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+            className={`w-full rounded-md border-2 py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6 focus:bg-none ${
+              validation.password
+                ? "border-green-500"
+                : errorPassword
+                ? "border-red-500"
+                : ""
+            }`}
           />
         </div>
+        <p className={`error mt-1 ${validation.password ? "hidden" : ""}`}>
+          {errorPassword}
+        </p>
       </div>
       <div>
         <div>
@@ -61,9 +109,20 @@ const Step4 = ({ formData, handleChange, prevStep }) => {
             required
             value={formData.confirmPassword}
             onChange={handleChange}
-            className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+            className={`w-full rounded-md border-2 py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6 focus:bg-none ${
+              validation.confirmPassword
+                ? "border-green-500"
+                : errorConfirmPassword
+                ? "border-red-500"
+                : ""
+            }`}
           />
         </div>
+        <p
+          className={`error mt-1 ${validation.confirmPassword ? "hidden" : ""}`}
+        >
+          {errorConfirmPassword}
+        </p>
       </div>
       <div>
         <a
@@ -77,8 +136,9 @@ const Step4 = ({ formData, handleChange, prevStep }) => {
       <button
         type="submit"
         className="flex w-full justify-center rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
+        onClick={handleSubmit}
       >
-        Sign in
+        Register
       </button>
     </>
   );

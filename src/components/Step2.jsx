@@ -1,8 +1,27 @@
+import { useState } from "react";
 import ProgressIndicator from "./ProgressIndicator";
 
-const Step2 = ({ formData, handleChange, prevStep, nextStep }) => {
+const Step2 = ({ formData, handleChange, prevStep, nextStep, validation }) => {
+  const [errorCountry, setErrorCountry] = useState("");
+  const [errorCity, setErrorCity] = useState("");
+  const [errorAddress, setErrorAddress] = useState("");
+
   const handleNext = () => {
-    nextStep();
+    if (!validation.country) {
+      setErrorCountry("Country is required");
+    }
+
+    if (!validation.city) {
+      setErrorCity("City is required");
+    }
+
+    if (!validation.address) {
+      setErrorAddress("Street Address is required");
+    }
+
+    if (validation.country && validation.city && validation.address) {
+      nextStep();
+    }
   };
 
   const handlePrev = () => {
@@ -27,9 +46,18 @@ const Step2 = ({ formData, handleChange, prevStep, nextStep }) => {
             required
             value={formData.country}
             onChange={handleChange}
-            className="block w-full rounded-md border-2 py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6"
+            className={`w-full rounded-md border-2 py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6 focus:bg-none ${
+              validation.country
+                ? "border-green-500"
+                : errorCountry
+                ? "border-red-500"
+                : ""
+            }`}
           />
         </div>
+        <p className={`error mt-1 ${validation.country ? "hidden" : ""}`}>
+          {errorCountry}
+        </p>
       </div>
       <div>
         <div>
@@ -48,9 +76,18 @@ const Step2 = ({ formData, handleChange, prevStep, nextStep }) => {
             required
             value={formData.city}
             onChange={handleChange}
-            className="block w-full rounded-md border-2 py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6"
+            className={`w-full rounded-md border-2 py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6 focus:bg-none ${
+              validation.city
+                ? "border-green-500"
+                : errorCity
+                ? "border-red-500"
+                : ""
+            }`}
           />
         </div>
+        <p className={`error mt-1 ${validation.city ? "hidden" : ""}`}>
+          {errorCity}
+        </p>
       </div>
       <div>
         <div>
@@ -69,9 +106,18 @@ const Step2 = ({ formData, handleChange, prevStep, nextStep }) => {
             required
             value={formData.address}
             onChange={handleChange}
-            className="block w-full rounded-md border-2 py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6"
+            className={`w-full rounded-md border-2 py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6 focus:bg-none ${
+              validation.address
+                ? "border-green-500"
+                : errorAddress
+                ? "border-red-500"
+                : ""
+            }`}
           />
         </div>
+        <p className={`error mt-1 ${validation.address ? "hidden" : ""}`}>
+          {errorAddress}
+        </p>
       </div>
       <div className="flex justify-between">
         <a

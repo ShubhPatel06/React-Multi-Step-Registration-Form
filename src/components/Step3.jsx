@@ -1,13 +1,34 @@
+import { useState } from "react";
 import ProgressIndicator from "./ProgressIndicator";
 
-const Step3 = ({ formData, handleChange, prevStep, nextStep }) => {
+const Step3 = ({ formData, handleChange, prevStep, nextStep, validation }) => {
+  const [errorDoB, setErrorDoB] = useState("");
+  const [errorGender, setErrorGender] = useState("");
+  const [errorOccupation, setErrorOccupation] = useState("");
+
   const handleNext = () => {
-    nextStep();
+    if (!validation.dob) {
+      setErrorDoB("Date of Birth is required");
+    }
+
+    if (!validation.gender) {
+      setErrorGender("Gender is required");
+    }
+
+    if (!validation.occupation) {
+      setErrorOccupation("Occupation is required");
+    }
+
+    if (validation.dob && validation.gender && validation.occupation) {
+      nextStep();
+    }
   };
 
   const handlePrev = () => {
     prevStep();
   };
+
+  const currentDate = new Date().toISOString().split("T")[0];
   return (
     <>
       <div>
@@ -23,13 +44,23 @@ const Step3 = ({ formData, handleChange, prevStep, nextStep }) => {
           <input
             id="dob"
             name="dob"
-            type="text"
+            type="date"
             required
             value={formData.dob}
             onChange={handleChange}
-            className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+            max={currentDate} // Set the max attribute to the current date
+            className={`w-full rounded-md border-2 py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6 focus:bg-none ${
+              validation.dob
+                ? "border-green-500"
+                : errorDoB
+                ? "border-red-500"
+                : ""
+            }`}
           />
         </div>
+        <p className={`error mt-1 ${validation.dob ? "hidden" : ""}`}>
+          {errorDoB}
+        </p>
       </div>
       <div>
         <div>
@@ -48,9 +79,18 @@ const Step3 = ({ formData, handleChange, prevStep, nextStep }) => {
             required
             value={formData.gender}
             onChange={handleChange}
-            className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+            className={`w-full rounded-md border-2 py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6 focus:bg-none ${
+              validation.gender
+                ? "border-green-500"
+                : errorGender
+                ? "border-red-500"
+                : ""
+            }`}
           />
         </div>
+        <p className={`error mt-1 ${validation.gender ? "hidden" : ""}`}>
+          {errorGender}
+        </p>
       </div>
       <div>
         <div>
@@ -69,9 +109,18 @@ const Step3 = ({ formData, handleChange, prevStep, nextStep }) => {
             required
             value={formData.occupation}
             onChange={handleChange}
-            className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+            className={`w-full rounded-md border-2 py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6 focus:bg-none ${
+              validation.occupation
+                ? "border-green-500"
+                : errorOccupation
+                ? "border-red-500"
+                : ""
+            }`}
           />
         </div>
+        <p className={`error mt-1 ${validation.occupation ? "hidden" : ""}`}>
+          {errorOccupation}
+        </p>
       </div>
       <div className="flex justify-between">
         <a

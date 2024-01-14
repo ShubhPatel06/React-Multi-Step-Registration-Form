@@ -1,23 +1,29 @@
 import { useState } from "react";
 import ProgressIndicator from "./ProgressIndicator";
 
-const Step1 = ({ formData, handleChange, nextStep }) => {
+const Step1 = ({ formData, handleChange, nextStep, validation }) => {
   const [errorName, setErrorName] = useState("");
-  const [nameColor, setNameColor] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorPhoneNo, setErrorPhoneNo] = useState("");
 
   const handleNext = () => {
-    if (formData.name.length > 8) {
-      setErrorName("");
-      setNameColor("green");
-    } else {
-      setErrorName("Full name is required");
-      setNameColor("red");
+    if (!validation.name) {
+      setErrorName("Full name must be at least 8 characters");
     }
 
-    if (formData.name !== "") {
+    if (!validation.email) {
+      setErrorEmail("Email is invalid");
+    }
+
+    if (!validation.phoneNo) {
+      setErrorPhoneNo("Phone number must be 10 digits");
+    }
+
+    if (validation.name && validation.email && validation.phoneNo) {
       nextStep();
     }
   };
+
   return (
     <>
       <div>
@@ -37,11 +43,18 @@ const Step1 = ({ formData, handleChange, nextStep }) => {
             required
             value={formData.name}
             onChange={handleChange}
-            className="block w-full rounded-md border-2 py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6"
-            style={{ borderColor: nameColor }}
+            className={`w-full rounded-md border-2 py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6 focus:bg-none ${
+              validation.name
+                ? "border-green-500"
+                : errorName
+                ? "border-red-500"
+                : ""
+            }`}
           />
         </div>
-        <p className="error mt-1">{errorName}</p>
+        <p className={`error mt-1 ${validation.name ? "hidden" : ""}`}>
+          {errorName}
+        </p>
       </div>
       <div>
         <div>
@@ -60,9 +73,18 @@ const Step1 = ({ formData, handleChange, nextStep }) => {
             required
             value={formData.email}
             onChange={handleChange}
-            className="block w-full rounded-md border-2 py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6"
+            className={`w-full rounded-md border-2 py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6 focus:bg-none ${
+              validation.email
+                ? "border-green-500"
+                : errorEmail
+                ? "border-red-500"
+                : ""
+            }`}
           />
         </div>
+        <p className={`error mt-1 ${validation.email ? "hidden" : ""}`}>
+          {errorEmail}
+        </p>
       </div>
       <div>
         <div>
@@ -81,9 +103,18 @@ const Step1 = ({ formData, handleChange, nextStep }) => {
             required
             value={formData.phoneNo}
             onChange={handleChange}
-            className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+            className={`w-full rounded-md border-2 py-1.5 pl-2 text-gray-900 sm:text-sm sm:leading-6 focus:bg-none ${
+              validation.phoneNo
+                ? "border-green-500"
+                : errorPhoneNo
+                ? "border-red-500"
+                : ""
+            }`}
           />
         </div>
+        <p className={`error mt-1 ${validation.phoneNo ? "hidden" : ""}`}>
+          {errorPhoneNo}
+        </p>
       </div>
       <div className="flex justify-end">
         <a
