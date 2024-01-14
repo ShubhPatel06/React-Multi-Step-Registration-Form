@@ -4,7 +4,7 @@ This is a Multi Step Registration Form with validation at each step before proce
 
 Developed using React JS and Tailwind CSS.
 
-![Alt text](image-1.png)
+![Alt text](image.png)
 
 ![Alt text](image-1.png)
 
